@@ -5,6 +5,7 @@ import Login from './Login';
 import NavBar from './NavBar';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./SignUp";
+import TodosPage from "./TodosPage";
 
 
 function App() {
@@ -13,8 +14,10 @@ function App() {
       < NavBar />
       <BrowserRouter>
         <Routes>
+          <Route path="/todos" element = { <TodosPage /> }></Route>
           <Route path="/login" element = {<Login />} ></Route>
           <Route path="/signup" element = {<SignUp />} ></Route>
+
 
         </Routes>
       </BrowserRouter>
