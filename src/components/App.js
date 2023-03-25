@@ -6,6 +6,7 @@ import NavBar from './NavBar';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import SignUp from "./SignUp";
 import TodosPage from "./TodosPage";
+import AddTodo from "./AddTodo";
 
 
 function App() {
@@ -17,10 +18,12 @@ function App() {
           <Route path="/todos" element = { <TodosPage /> }></Route>
           <Route path="/login" element = {<Login />} ></Route>
           <Route path="/signup" element = {<SignUp />} ></Route>
+          <Route path="/addtodo" element = {<AddTodo />} ></Route>
 
 
         </Routes>
       </BrowserRouter>
+
     </div>
   );
 }

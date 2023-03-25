@@ -11,8 +11,9 @@ function NavBar() {
           <Navbar.Brand href="/home">Home</Navbar.Brand>
           <Nav className="me-auto">
           <Nav.Link href="/todos">Todo List</Nav.Link>
-            <Nav.Link href="/login">Login</Nav.Link>
-            <Nav.Link href="/signup">SignUp</Nav.Link>
+          <Nav.Link href="/addtodo">Add Todo</Nav.Link>
+          <Nav.Link href="/login">Login</Nav.Link>
+          <Nav.Link href="/signup">SignUp</Nav.Link>
           </Nav>
         </Container>
       </Navbar>
