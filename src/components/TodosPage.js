@@ -5,12 +5,21 @@ import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function TodosPage() {
-  const [data, setData] = useState([]);
+  const [data, setData] = useState({
+    title: '',
+    description: '',
+    status: '',
+    priority: ''
+  });
+  
+  // console.log(data)
   useEffect(() => {
+    setData([])
     fetch("http://localhost:3000/todos")
       .then((response) => (response.json()))
-      .then((data) => setData(data));
-      console.log(setData)
+      .then((data) => {
+        setData(data)
+      });
   }, []);
 
   return (
@@ -21,8 +30,8 @@ function TodosPage() {
             <tr>
               <th>#</th>
               <th>Task</th>
-              <th>Date Created</th>
-              <th>Due Date</th>
+              <th>Description</th>
+              <th>Date Created</th>              
               <th>Priority</th>
               <th>Status</th>
               <th>Actions</th>
@@ -33,8 +42,8 @@ function TodosPage() {
               <tr key={todo.id}>
                 <td>{todo.id}</td>
                 <td>{todo.task}</td>
-                <td>{todo.dateCreated}</td>
-                <td>{todo.dueDate}</td>
+                <td>{todo.description}</td>
+                <td>{todo.created_at}</td>                
                 <td>
                   <Badge
                     bg={
@@ -69,7 +78,7 @@ function TodosPage() {
             ))}
           </tbody>
         </Table>
-        <Button variant="info" size="lg">
+        <Button variant="info" size="lg" onClick={ event => window.location.href='/addtodo' }>
           Add a Task
         </Button>
       </Row>

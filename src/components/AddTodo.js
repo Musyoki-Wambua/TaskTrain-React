@@ -14,23 +14,31 @@ const AddTodo = () => {
   function handleSubmit(event){
     event.preventDefault()
 
-    // console.log(formData)
+    // if (!formData.title || !formData.description || !formData.status || !formData.priority) {
+    //   alert("Please fill in all fields")
+    //   return;
+    // }
+    console.log(formData)
 
-    fetch ('http://localhost:3000/todos',{
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(formData)
-    }).then((response) => {
-      if(response.ok){
-        response.json().then((formData) => setFormData(formData));
-        console.log(setFormData)
-      }else {
-        response.json().then((errors) => setErrors(errors.error))
-      }
+    fetch("http://localhost:3000/todos", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData),
     })
-  }
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error('Failed to add todo');
+        }
+        return res.json();
+      })
+      .then((data) => {
+        console.log("Task added:", data);
+        setFormData(data)
+        console.log(setFormData)
+      })
+      .catch((errors) => setErrors(errors));
+  };
+
 
   return (
     <Container>
@@ -75,7 +83,6 @@ const AddTodo = () => {
             placeholder="LOW, MEDIUM or HIGH"
           />
         </FormGroup>
-
         <Button onClick={handleSubmit}>Submit</Button>
       </Row>
     </Container>

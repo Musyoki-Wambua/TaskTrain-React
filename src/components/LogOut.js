@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { confirmAlert } from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css';
+import Button from 'react-bootstrap/Button';
 
 const LogOut = () => {
   const navigate = useNavigate();
@@ -12,7 +13,8 @@ const LogOut = () => {
      })
      .then((response) => {
         if (response.ok) {
-            navigate.push('/login');
+            console.log(response)
+            navigate('/login');
         }
     });
   };
@@ -34,9 +36,9 @@ const LogOut = () => {
   };
 
   return (
-    <div>
-      <button type="button" onClick={handleConfirm}>Logout</button>
-    </div>
+    <Button variant="secondary" onClick={handleConfirm}>
+            LOG OUT
+    </Button>
   );
 };
 
