@@ -7,12 +7,11 @@ import Button from "react-bootstrap/Button";
 function TodosPage() {
   const [data, setData] = useState([]);
   
-  // console.log(data)
   useEffect(() => {
     setData([]);
     fetch("http://localhost:3000/todos")
       .then((response) => {
-        // console.log(response);
+          // console.log(response);
         return response.json();
       })
       .then((data) => {
@@ -23,6 +22,7 @@ function TodosPage() {
         console.error(error);
       });
   }, []);
+
 
   const handleEditTodo = (id) => {
     fetch(`http://localhost:3000/todos/${id}`, {
@@ -74,7 +74,14 @@ function TodosPage() {
             </tr>
           </thead>
           <tbody>
-            {data.length > 0 && data.map((todo) => (
+            {data.length > 0 && data.map((todo) => ({
+              id: data.id, 
+              title: data.title, 
+              description: data.description,
+              status: data.status,
+              priority:data.priority
+            }))}
+            {/* {data.length > 0 && data.map((todo) => (
               <tr key={todo.id}
               onClick={() => handleEditTodo(todo.id)}
               style={ {cursor: 'pointer'} }
@@ -118,7 +125,7 @@ function TodosPage() {
                   </Button>
                 </td>
               </tr>
-            ))}
+            ))} */}
           </tbody>
         </Table>
         <Button variant="info" size="lg" onClick={ event => window.location.href='/addtodo' }>
