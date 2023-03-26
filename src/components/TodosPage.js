@@ -6,22 +6,12 @@ import Button from "react-bootstrap/Button";
 
 function TodosPage() {
   const [data, setData] = useState([]);
-  const [error, setError] = useState(null)
-
   useEffect(() => {
     fetch("http://localhost:3000/todos")
       .then((response) => (response.json()))
-      .then((data) => {
-        if (data.errors){
-          setError(data.errors.info)
-        }else {
-          setData(data)
-        }
-      })
-      .catch((error) => {
-        setError(error.message)
-      })
-  },[]);
+      .then((data) => setData(data));
+      console.log(setData)
+  }, []);
 
   return (
     <Container>
@@ -82,9 +72,6 @@ function TodosPage() {
         <Button variant="info" size="lg">
           Add a Task
         </Button>
-        <div>
-      {error && <p>{error}</p>}
-    </div>
       </Row>
     </Container>
   );

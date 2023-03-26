@@ -82,9 +82,9 @@ function Login() {
           <Button variant="secondary" onClick={handleClose}>
             Go To Register
           </Button>
-          {errors.map((error) => (
+          {/* {errors.map((error) => (
           <span key={error} className="text-red-500">{error}</span>
-        ))}
+        ))} */}
         </Modal.Footer>
       </Modal>
     </>
