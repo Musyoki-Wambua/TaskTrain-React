@@ -3,10 +3,31 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
 function Login() {
+  const [data, setData] = useState( {username:'', password: ''} )
+  const [errors, setErrors] = useState([])
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+
+  function handleSubmit(event){
+    event.preventDefault()
+
+    fetch ('http://localhost:3000/users/login',{
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
+    }).then((response) => {
+      if(response.ok){
+        response.json().then((data) => setData(data));
+        window.location.href = '/todos'
+      }else {
+        response.json().then((errors) => setErrors(errors.errors))
+      }
+    })
+  }
 
   return (
     <>
@@ -27,20 +48,26 @@ function Login() {
             <label>Email address</label>
             <input
               type="email"
+              id="email"
               className="form-control mt-1"
               placeholder="Enter email"
+              value= {data.email}
+              onChange={(event) => setData({...data, email: event.target.value })}
             />
           </div>
           <div className="form-group mt-3">
             <label>Password</label>
             <input
               type="password"
+              id="password"
               className="form-control mt-1"
               placeholder="Enter password"
+              value= {data.password}
+              onChange={(event) => setData({...data, password: event.target.value })}
             />
           </div>
           <div className="d-grid gap-5 mt-3">
-            <button type="submit" className="btn btn-primary">
+            <button type="submit" className="btn btn-primary" onClick={handleSubmit} >
               Submit
             </button>
           </div>
@@ -53,11 +80,11 @@ function Login() {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleClose}>
-            Go To Register Button 
+            Go To Register
           </Button>
-          <Button variant="primary" onClick={handleClose}>
-            Login
-          </Button>
+          {errors.map((error) => (
+          <span key={error} className="text-red-500">{error}</span>
+        ))}
         </Modal.Footer>
       </Modal>
     </>

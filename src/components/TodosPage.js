@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Badge from "react-bootstrap/Badge";
 import Table from "react-bootstrap/Table";
 import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function TodosPage() {
+  const [data, setData] = useState([]);
+  const [error, setError] = useState(null)
+
+  useEffect(() => {
+    fetch("http://localhost:3000/todos")
+      .then((response) => (response.json()))
+      .then((data) => {
+        if (data.errors){
+          setError(data.errors.info)
+        }else {
+          setData(data)
+        }
+      })
+      .catch((error) => {
+        setError(error.message)
+      })
+  },[]);
+
   return (
     <Container>
       <Row>
@@ -15,66 +33,58 @@ function TodosPage() {
               <th>Task</th>
               <th>Date Created</th>
               <th>Due Date</th>
-              <th>Priority </th>
+              <th>Priority</th>
               <th>Status</th>
               <th>Actions</th>
-
             </tr>
           </thead>
           <tbody>
-            <tr>
-              <td>1</td>
-              <td>Exam</td>
-              <td>Wednesday</td>
-              <td>Saturday</td>
-              <td>
-                <Badge bg="primary">LOW</Badge>{" "}
-              </td>
-              <td>
-                <Badge bg="success">CREATED</Badge>{" "}
-              </td>
-              <td><Button variant="secondary">Edit</Button>{' '}
-                  <Button variant="danger">Delete</Button>{' '}
+            {Array.isArray(data) && data.map((todo) => (
+              <tr key={todo.id}>
+                <td>{todo.id}</td>
+                <td>{todo.task}</td>
+                <td>{todo.dateCreated}</td>
+                <td>{todo.dueDate}</td>
+                <td>
+                  <Badge
+                    bg={
+                      todo.priority === "HIGH"
+                        ? "danger"
+                        : todo.priority === "MEDIUM"
+                        ? "warning"
+                        : "primary"
+                    }
+                  >
+                    {todo.priority}
+                  </Badge>{" "}
                 </td>
-            </tr>
-            <tr>
-              <td>2</td>
-              <td>Car Wash</td>
-              <td>Thursday</td>
-              <td>Sunday</td>
-              <td>
-                <Badge bg="warning">MEDIUM</Badge>{" "}
-              </td>
-              <td><Badge bg="dark">STARTED</Badge>{" "}</td>
-              <td><Button variant="secondary">Edit</Button>{' '}
-                  <Button variant="danger">Delete</Button>{' '}
+                <td>
+                  <Badge
+                    bg={
+                      todo.status === "COMPLETED"
+                        ? "info"
+                        : todo.status === "STARTED"
+                        ? "dark"
+                        : "success"
+                    }
+                  >
+                    {todo.status}
+                  </Badge>{" "}
                 </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>BasketBall Game</td>
-              <td>Friday</td>
-              <td>Monday</td>
-              <td><Badge bg="danger">HIGH</Badge>{" "}</td>
-              <td><Badge bg="info">COMPLETED</Badge>{" "}</td>
-              <td><Button variant="secondary">Edit</Button>{' '}
-                  <Button variant="danger">Delete</Button>{' '}
+                <td>
+                  <Button variant="secondary">Edit</Button>{" "}
+                  <Button variant="danger">Delete</Button>{" "}
                 </td>
-            </tr>
-            <tr>
-              <td>3</td>
-              <td>Task Train Project</td>
-              <td>Friday</td>
-              <td>Monday</td>
-              <td><Badge bg="danger">HIGH</Badge>{" "}</td>
-              <td><Badge bg="LIGHT">CANCELLED</Badge>{" "}</td>
-              <td><Button variant="secondary">Edit</Button>{' '}
-                  <Button variant="danger">Delete</Button>{' '}
-                </td>
-            </tr>
+              </tr>
+            ))}
           </tbody>
         </Table>
-        <Button variant="info" size="lg">Add a Task</Button>
+        <Button variant="info" size="lg">
+          Add a Task
+        </Button>
+        <div>
+      {error && <p>{error}</p>}
+    </div>
       </Row>
     </Container>
   );
