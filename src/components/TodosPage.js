@@ -5,22 +5,58 @@ import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 
 function TodosPage() {
-  const [data, setData] = useState({
-    title: '',
-    description: '',
-    status: '',
-    priority: ''
-  });
+  const [data, setData] = useState([]);
   
   // console.log(data)
   useEffect(() => {
-    setData([])
+    setData([]);
     fetch("http://localhost:3000/todos")
-      .then((response) => (response.json()))
+      .then((response) => {
+        // console.log(response);
+        return response.json();
+      })
       .then((data) => {
-        setData(data)
+        console.log(data);
+        setData(data);
+      })
+      .catch((error) => {
+        console.error(error);
       });
   }, []);
+
+  const handleEditTodo = (id) => {
+    fetch(`http://localhost:3000/todos/${id}`, {
+      method: 'PUT', 
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        title: '',
+        description: '',
+        status: '', 
+        priority:''
+      })
+    })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log(data)
+    })
+  }
+
+  const handleDeleteTodo = (id) => {
+    fetch (`http://localhost:3000/todos/${id}`, {
+      method: 'DELETE',
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log(data)
+        setData(data.filter((todo) => todo.id !== id))
+      })
+      .catch((error) => {
+        console.error(error)
+      })
+  }
+  
 
   return (
     <Container>
@@ -38,8 +74,12 @@ function TodosPage() {
             </tr>
           </thead>
           <tbody>
-            {Array.isArray(data) && data.map((todo) => (
-              <tr key={todo.id}>
+            {data.length > 0 && data.map((todo) => (
+              <tr key={todo.id}
+              onClick={() => handleEditTodo(todo.id)}
+              style={ {cursor: 'pointer'} }
+              >
+
                 <td>{todo.id}</td>
                 <td>{todo.task}</td>
                 <td>{todo.description}</td>
@@ -52,8 +92,7 @@ function TodosPage() {
                         : todo.priority === "MEDIUM"
                         ? "warning"
                         : "primary"
-                    }
-                  >
+                    }>
                     {todo.priority}
                   </Badge>{" "}
                 </td>
@@ -65,14 +104,18 @@ function TodosPage() {
                         : todo.status === "STARTED"
                         ? "dark"
                         : "success"
-                    }
-                  >
+                    }>
                     {todo.status}
                   </Badge>{" "}
                 </td>
                 <td>
                   <Button variant="secondary">Edit</Button>{" "}
                   <Button variant="danger">Delete</Button>{" "}
+                </td>
+                <td>
+                  <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>
+                    Delete
+                  </Button>
                 </td>
               </tr>
             ))}
