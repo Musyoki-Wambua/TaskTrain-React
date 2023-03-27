@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
-function SignUp() {
+function SignUp(onHide) {
   const [data, setData] = useState({
     username: '',
     email: '',
@@ -77,7 +77,7 @@ function SignUp() {
             />
           </div>
           <div className="d-grid gap-5 mt-3">
-            <button type="submit" className="btn btn-primary" onClick={handleSubmit}>
+            <button type="submit" className="btn btn-primary" onClick={handleSubmit} >
               Submit
             </button>
           </div>

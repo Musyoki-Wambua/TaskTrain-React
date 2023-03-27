@@ -3,10 +3,13 @@ import Badge from "react-bootstrap/Badge";
 import Table from "react-bootstrap/Table";
 import { Container, Row } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
+import EditTodo from "./EditTodo";
 
 function TodosPage() {
   const [data, setData] = useState([]);
   const [editTodo, setEditTodo] = useState([])
+  const [showEditModal, setShowEditModal] = useState(false);
+
   
   useEffect(() => {
     setData([]);
@@ -55,6 +58,12 @@ function TodosPage() {
         console.error(error)
       })
   }
+
+  
+   const handleShowEditModal = (todo) => {
+    setEditTodo(todo);
+    setShowEditModal(true);
+  }
   
 
   return (
@@ -75,7 +84,7 @@ function TodosPage() {
           <tbody>
             {data.map((todo) => (
               <tr key={todo.id}
-              onClick={() => handleEditTodo(todo.id)}
+              onClick={() => setShowEditModal(true)}
               style={ {cursor: 'pointer'} }
               >
                 <td>{todo.id}</td>
@@ -108,7 +117,7 @@ function TodosPage() {
                 </td>
                 <td>
                     <div className="d-flex">
-                      <Button variant="secondary" onClick={() => handleEditTodo} >Edit</Button>{" "}
+                      <Button variant="secondary" onClick={() => setShowEditModal(true)} >Edit</Button>{" "}
                       <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>Delete</Button>
                     </div>
                 </td>
@@ -121,6 +130,13 @@ function TodosPage() {
           Add a Task
         </Button>
       </Row>
+      <EditTodo
+      show={showEditModal}
+      onHide={() => setShowEditModal(false)}
+      handleEditTodo={handleEditTodo}
+      todo={editTodo}
+      setTodo={setEditTodo}
+    />
     </Container>
   );
 }
