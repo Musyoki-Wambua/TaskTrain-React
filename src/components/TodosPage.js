@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 
 function TodosPage() {
   const [data, setData] = useState([]);
+  const [editTodo, setEditTodo] = useState([])
   
   useEffect(() => {
     setData([]);
@@ -14,15 +15,14 @@ function TodosPage() {
           // console.log(response);
         return response.json();
       })
-      .then((data) => {
-        console.log(data);
-        setData(data);
+      .then((responseData) => {
+        // console.log(responseData.data);
+        setData(responseData.data);
       })
       .catch((error) => {
         console.error(error);
       });
   }, []);
-
 
   const handleEditTodo = (id) => {
     fetch(`http://localhost:3000/todos/${id}`, {
@@ -30,22 +30,21 @@ function TodosPage() {
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({
-        title: '',
-        description: '',
-        status: '', 
-        priority:''
-      })
+      body: JSON.stringify(editTodo)
     })
     .then((response) => response.json())
     .then((data) => {
       console.log(data)
+      setEditTodo(data)
     })
+    .catch((error) => {
+      console.error(error);
+    });    
   }
 
   const handleDeleteTodo = (id) => {
     fetch (`http://localhost:3000/todos/${id}`, {
-      method: 'DELETE',
+      method: 'DELETE'
     })
       .then((response) => response.json())
       .then((data) => {
@@ -65,7 +64,7 @@ function TodosPage() {
           <thead>
             <tr>
               <th>#</th>
-              <th>Task</th>
+              <th>Title</th>
               <th>Description</th>
               <th>Date Created</th>              
               <th>Priority</th>
@@ -74,21 +73,13 @@ function TodosPage() {
             </tr>
           </thead>
           <tbody>
-            {data.length > 0 && data.map((todo) => ({
-              id: data.id, 
-              title: data.title, 
-              description: data.description,
-              status: data.status,
-              priority:data.priority
-            }))}
-            {/* {data.length > 0 && data.map((todo) => (
+            {data.map((todo) => (
               <tr key={todo.id}
               onClick={() => handleEditTodo(todo.id)}
               style={ {cursor: 'pointer'} }
               >
-
                 <td>{todo.id}</td>
-                <td>{todo.task}</td>
+                <td>{todo.title}</td>
                 <td>{todo.description}</td>
                 <td>{todo.created_at}</td>                
                 <td>
@@ -116,16 +107,14 @@ function TodosPage() {
                   </Badge>{" "}
                 </td>
                 <td>
-                  <Button variant="secondary">Edit</Button>{" "}
-                  <Button variant="danger">Delete</Button>{" "}
+                    <div className="d-flex">
+                      <Button variant="secondary" onClick={() => handleEditTodo} >Edit</Button>{" "}
+                      <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>Delete</Button>
+                    </div>
                 </td>
-                <td>
-                  <Button variant="danger" onClick={() => handleDeleteTodo(todo.id)}>
-                    Delete
-                  </Button>
-                </td>
+
               </tr>
-            ))} */}
+            ))}
           </tbody>
         </Table>
         <Button variant="info" size="lg" onClick={ event => window.location.href='/addtodo' }>
