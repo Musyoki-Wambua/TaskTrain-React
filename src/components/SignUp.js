@@ -16,7 +16,7 @@ function SignUp(onHide) {
 
   function handleSubmit(event) {
     event.preventDefault()
-    fetch("http://localhost:3000/users", {
+    fetch("https://task-train-rails-7l2f.onrender.com/users", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

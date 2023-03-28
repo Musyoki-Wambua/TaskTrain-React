@@ -13,7 +13,7 @@ function TodosPage() {
   
   useEffect(() => {
     setData([]);
-    fetch("http://localhost:3000/todos")
+    fetch("https://task-train-rails-7l2f.onrender.com/todos")
       .then((response) => {
           // console.log(response);
         return response.json();
@@ -28,17 +28,19 @@ function TodosPage() {
   }, []);
 
   const handleEditTodo = (id) => {
-    fetch(`http://localhost:3000/todos/${id}`, {
+    fetch(`https://task-train-rails-7l2f.onrender.com/${id}`, {
       method: 'PUT', 
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(editTodo)
     })
+    
     .then((response) => response.json())
-    .then((data) => {
-      console.log(data)
-      setEditTodo(data)
+    .then((formData) => {
+      console.log(formData)
+      setEditTodo(formData.data)
+      // console.log(setEditTodo)
     })
     .catch((error) => {
       console.error(error);
@@ -46,7 +48,7 @@ function TodosPage() {
   }
 
   const handleDeleteTodo = (id) => {
-    fetch (`http://localhost:3000/todos/${id}`, {
+    fetch (`https://task-train-rails-7l2f.onrender.com/${id}`, {
       method: 'DELETE'
     })
       .then((response) => response.json())

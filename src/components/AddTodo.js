@@ -20,7 +20,7 @@ const AddTodo = () => {
     // }
     console.log(formData)
 
-    fetch("http://localhost:3000/todos", {
+    fetch("https://task-train-rails-7l2f.onrender.com/todos", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(formData),

@@ -8,7 +8,7 @@ const LogOut = () => {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    fetch('http://localhost:3000/users/logout', {
+    fetch('https://task-train-rails-7l2f.onrender.com/logout', {
         method: 'DELETE',
      })
      .then((response) => {
